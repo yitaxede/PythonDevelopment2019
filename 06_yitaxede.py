@@ -12,7 +12,7 @@ class App(Frame):
         Frame.__init__(self, master)
         self.master.rowconfigure(0, weight=1)
         self.master.columnconfigure(0, weight=1)
-        self.master.title(Title)
+        #self.master.title(Title)
         self.grid(sticky=N+E+S+W)
         self.create()
         self.adjust()
@@ -25,10 +25,10 @@ class App(Frame):
     def adjust(self):
         '''Adjust grid sise/properties'''
         # TODO Smart detecting resizeable/still cells
-        for i in range(self.size()[0]):
-            self.columnconfigure(i, weight=12)
-        for i in range(self.size()[1]):
-            self.rowconfigure(i, weight=12)
+        #for i in range(self.size()[0]):
+        #    self.columnconfigure(i, weight=12)
+        #for i in range(self.size()[1]):
+        #    self.rowconfigure(i, weight=12)
         
 class Paint(Canvas):
     '''Canvas with simple drawing'''
@@ -58,14 +58,19 @@ class Paint(Canvas):
 
 class MyApp(App):
     def askcolor(self):
-        self.Canvas.foreground.set(colorchooser.askcolor()[1])
-        self.ShowColor['bg'] = self.Canvas.foreground.get()
+        clr = colorchooser.askcolor()[1]
+        if clr:
+            self.Canvas.foreground.set(clr)
+            self.ShowColor['bg'] = clr
 
     def create(self):
         self.Canvas = Paint(self, foreground="midnightblue")
         self.Canvas.grid(row=0, column=0, sticky=N+E+S+W)
+        self.Canvas2 = Paint(self, foreground="midnightblue")
+        self.Canvas2.grid(row=1, column=0, sticky=N+E+S+W)
+        
         self.ctrlFrame = Frame(self)
-        self.ctrlFrame.grid(row=0, column=1)
+        self.ctrlFrame.grid(row=0, column=1, rowspan=2)
         self.AskColor = Button(self.ctrlFrame, text="Color", command=self.askcolor)
         self.AskColor.grid(row=0, column=0, sticky=E+W)
         self.ShowColor = Label(self.ctrlFrame, textvariable=self.Canvas.foreground, height=2, bg=self.Canvas.foreground.get())
@@ -76,9 +81,10 @@ class MyApp(App):
     def adjust(self):
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
-
+        
+        
 app = MyApp(Title="Canvas Example")
 app.mainloop()
 for item in app.Canvas.find_all():
-    print(*app.Canvas.coords(item), app.Canvas.itemcget(item, "fill"))
+   print(*app.Canvas.coords(item), app.Canvas.itemcget(item, "fill"))
 
