@@ -112,13 +112,15 @@ class DoubleApp(Frame):
         self.app1 = MyApp(self)
         self.app2 = MyApp(self)
          
-        self.ctrlFrame = Frame(self)
-        self.ctrlFrame.grid(sticky=N+S+W+E)
         self.mButton1 = Button(self.app1.ctrlFrame, text="To other canvas", command=self.first_to_second)
         self.mButton1.grid(row=3, column=0, sticky=E+W)
-        self.ctrlFrame.grid(sticky=N+S+W+E)
         self.mButton2 = Button(self.app2.ctrlFrame, text="To other canvas", command=self.second_to_first)
         self.mButton2.grid(row=3, column=0, sticky=E+W)
+        
+        self.ctrlFrame = Frame(self)
+        self.ctrlFrame.grid(sticky=N+S+W+E)
+        self.qButton = Button(self.ctrlFrame, text="Quit", command=self.quit)
+        self.qButton.grid(row=0, column=3, sticky=E+W)
         
     def first_to_second(self):
         for id in self.app1.Canvas.find_all():
