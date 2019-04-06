@@ -105,14 +105,14 @@ class MyApp(App):
         
     def save_as(self):
         name = filedialog.asksaveasfilename(initialfile="canvas.cnv", defaultextension=".cnv", filetypes=[("Canvas Documents","*.cnv")])
-        if name != "":
+        if name:
             file = open(name, 'w')
             for id in self.Canvas.find_all():
                 file.write(f'{self.Canvas.coords(id)}, \"{self.Canvas.itemcget(id, "fill")}\"\n')
                 
     def read_from(self):
         name = filedialog.askopenfilename(filetypes=[("Canvas Documents","*.cnv")])
-        if name != "":
+        if name:
             self.Canvas.delete(ALL)
             file = open(name, 'r')
             for line in file:
