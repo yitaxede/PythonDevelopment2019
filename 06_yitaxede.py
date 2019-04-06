@@ -59,6 +59,7 @@ class Paint(Canvas):
 class MyApp(App):
     def askcolor(self):
         self.Canvas.foreground.set(colorchooser.askcolor()[1])
+        self.ShowColor['bg'] = self.Canvas.foreground.get()
 
     def create(self):
         self.Canvas = Paint(self, foreground="midnightblue")
@@ -67,7 +68,7 @@ class MyApp(App):
         self.ctrlFrame.grid(row=0, column=1)
         self.AskColor = Button(self.ctrlFrame, text="Color", command=self.askcolor)
         self.AskColor.grid(row=0, column=0, sticky=E+W)
-        self.ShowColor = Label(self.ctrlFrame, textvariable=self.Canvas.foreground, height=2)
+        self.ShowColor = Label(self.ctrlFrame, textvariable=self.Canvas.foreground, height=2, bg=self.Canvas.foreground.get())
         self.ShowColor.grid(row=1, column=0, sticky=N+W+E)
         self.Quit = Button(self.ctrlFrame, text="Quit", command=self.quit)
         self.Quit.grid(row=2, column=0, sticky=E+W)
