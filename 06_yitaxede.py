@@ -13,7 +13,6 @@ class App(Frame):
         Frame.__init__(self, master)
         self.master.rowconfigure(0, weight=1)
         self.master.columnconfigure(0, weight=1)
-        #self.master.title(Title)
         self.grid(sticky=N+E+S+W)
         self.create()
         self.adjust()
@@ -94,16 +93,34 @@ class MyApp(App):
         self.ShowColor.grid(row=1, column=0, sticky=N+W+E)
         self.Clear = Button(self.ctrlFrame, text="Clear", command=lambda:self.Canvas.delete(ALL))
         self.Clear.grid(row=2, column=0, sticky=E+W)
-        self.SaveAs = Button(self.ctrlFrame, text="Save as...", command=lambda:self.Canvas.postscript(file=filedialog.asksaveasfilename(defaultextension=".ps", filetypes=[("PostScript Documents","*.ps")]), colormode="color"))
+        self.SaveAs = Button(self.ctrlFrame, text="Save as...", command=self.save_as)
         self.SaveAs.grid(row=4, column=0, sticky=E+W)
+        self.Open = Button(self.ctrlFrame, text="Open...", command=self.read_from)
+        self.Open.grid(row=5, column=0, sticky=E+W)
         
         
     def adjust(self):
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
         
-    #def save_as(self):
-        
+    def save_as(self):
+        name = filedialog.asksaveasfilename(initialfile="canvas.cnv", defaultextension=".cnv", filetypes=[("Canvas Documents","*.cnv")])
+        if name != "":
+            file = open(name, 'w')
+            for id in self.Canvas.find_all():
+                file.write(f'{self.Canvas.coords(id)}, \"{self.Canvas.itemcget(id, "fill")}\"\n')
+                
+    def read_from(self):
+        name = filedialog.askopenfilename(filetypes=[("Canvas Documents","*.cnv")])
+        if name != "":
+            self.Canvas.delete(ALL)
+            file = open(name, 'r')
+            for line in file:
+                if len(line) <= 2:
+                    break
+                coords, clr = eval(line)
+                self.Canvas.create_line(*coords, fill=clr)
+            
         
 class DoubleApp(Frame):
     def __init__(self, master=None, Title="Double Application"):
@@ -141,8 +158,5 @@ class DoubleApp(Frame):
         
 
 app = DoubleApp(Title="Double Canvas Example")
-#app = MyApp(Title="Canvas Example")
 app.mainloop()
-#for item in app.Canvas.find_all():
-#   print(*app.Canvas.coords(item), app.Canvas.itemcget(item, "fill"))
 
