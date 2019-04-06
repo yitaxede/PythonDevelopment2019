@@ -66,25 +66,41 @@ class MyApp(App):
     def create(self):
         self.Canvas = Paint(self, foreground="midnightblue")
         self.Canvas.grid(row=0, column=0, sticky=N+E+S+W)
-        self.Canvas2 = Paint(self, foreground="midnightblue")
-        self.Canvas2.grid(row=1, column=0, sticky=N+E+S+W)
-        
         self.ctrlFrame = Frame(self)
-        self.ctrlFrame.grid(row=0, column=1, rowspan=2)
+        self.ctrlFrame.grid(row=0, column=1)
         self.AskColor = Button(self.ctrlFrame, text="Color", command=self.askcolor)
         self.AskColor.grid(row=0, column=0, sticky=E+W)
         self.ShowColor = Label(self.ctrlFrame, textvariable=self.Canvas.foreground, height=2, bg=self.Canvas.foreground.get())
         self.ShowColor.grid(row=1, column=0, sticky=N+W+E)
-        self.Quit = Button(self.ctrlFrame, text="Quit", command=self.quit)
-        self.Quit.grid(row=2, column=0, sticky=E+W)
+        self.Clear = Button(self.ctrlFrame, text="Clear", command=lambda:self.Canvas.delete(ALL))
+        self.Clear.grid(row=2, column=0, sticky=E+W)
         
     def adjust(self):
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
         
+class DoubleApp(Frame):
+    def __init__(self, master=None, Title="Double Application"):
+        Frame.__init__(self, master)
+        self.master.title(Title)
+        self.grid(row=0, column=0, sticky=N+W+E+S)
+        self.master.rowconfigure(0, weight=1)
+        self.master.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=1)
+        self.rowconfigure(1, weight=1)
+        self.rowconfigure(2, weight=1)
+        self.app1 = MyApp(self)
+        self.app2 = MyApp(self)
+         
+        self.ctrlFrame = Frame(self)
+        self.ctrlFrame.grid(sticky=N+S+W+E)
+        #self.AskColor = Button(self.ctrlFrame, text="Color", command=self.askcolor)
+        #self.AskColor.grid(row=0, column=0, sticky=E+W)
         
-app = MyApp(Title="Canvas Example")
+
+app = DoubleApp(Title="Double Canvas Example")
+#app = MyApp(Title="Canvas Example")
 app.mainloop()
-for item in app.Canvas.find_all():
-   print(*app.Canvas.coords(item), app.Canvas.itemcget(item, "fill"))
+#for item in app.Canvas.find_all():
+#   print(*app.Canvas.coords(item), app.Canvas.itemcget(item, "fill"))
 
