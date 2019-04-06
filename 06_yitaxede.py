@@ -5,6 +5,7 @@
 
 from tkinter import *
 from tkinter import colorchooser
+from tkinter import filedialog
 
 class App(Frame):
     '''Base framed application class'''
@@ -113,8 +114,21 @@ class DoubleApp(Frame):
          
         self.ctrlFrame = Frame(self)
         self.ctrlFrame.grid(sticky=N+S+W+E)
-        #self.AskColor = Button(self.ctrlFrame, text="Color", command=self.askcolor)
-        #self.AskColor.grid(row=0, column=0, sticky=E+W)
+        self.mButton1 = Button(self.app1.ctrlFrame, text="To other canvas", command=self.first_to_second)
+        self.mButton1.grid(row=3, column=0, sticky=E+W)
+        self.ctrlFrame.grid(sticky=N+S+W+E)
+        self.mButton2 = Button(self.app2.ctrlFrame, text="To other canvas", command=self.second_to_first)
+        self.mButton2.grid(row=3, column=0, sticky=E+W)
+        
+    def first_to_second(self):
+        for id in self.app1.Canvas.find_all():
+            self.app2.Canvas.create_line(*self.app1.Canvas.coords(id), fill=self.app1.Canvas.itemcget(id, "fill"))
+            self.app1.Canvas.delete(id)
+        
+    def second_to_first(self):
+        for id in self.app2.Canvas.find_all():
+            self.app1.Canvas.create_line(*self.app2.Canvas.coords(id), fill=self.app2.Canvas.itemcget(id, "fill"))
+            self.app2.Canvas.delete(id)
 
         
 
