@@ -34,19 +34,35 @@ class Paint(Canvas):
     '''Canvas with simple drawing'''
     def mousedown(self, event):
         '''Store mousedown coords'''
-        self.x0, self.y0 = event.x, event.y
+        self.x0, self.y0 = self.canvasx(event.x), self.canvasy(event.y)
         self.cursor = None
 
     def mousemove(self, event):
         '''Do sometheing when drag a mouse'''
         if self.cursor:
             self.delete(self.cursor)
-        self.cursor = self.create_line((self.x0, self.y0, event.x, event.y), fill=self.foreground.get())
+        x, y = self.canvasx(event.x), self.canvasy(event.y)
+        self.cursor = self.create_line((self.x0, self.y0, x, y), fill=self.foreground.get())
 
     def mouseup(self, event):
         '''Dragging is done'''
         self.cursor = None
-        #print(self.find_all())
+        
+    def rightmousedown(self, event):
+        '''Store rightmousedown coords'''
+        self.rx0, self.ry0 = self.canvasx(event.x), self.canvasy(event.y)
+        self.moving = self.find_closest(self.canvasx(event.x), self.canvasy(event.y))
+
+    def rightmousemove(self, event):
+        '''Do sometheing when drag a mouse with the right button pressed'''
+        if self.moving:
+            x, y = self.canvasx(event.x), self.canvasy(event.y)
+            self.move(self.moving, x - self.rx0, y - self.ry0)
+            self.rx0, self.ry0 = x, y
+
+    def rightmouseup(self, event):
+        '''Dragging is done'''
+        self.moving = None
 
     def __init__(self, master=None, *ap, foreground="black", **an):
         self.foreground = StringVar()
@@ -55,6 +71,9 @@ class Paint(Canvas):
         self.bind("<Button-1>", self.mousedown)
         self.bind("<B1-Motion>", self.mousemove)
         self.bind("<ButtonRelease-1>", self.mouseup)
+        self.bind("<Button-3>", self.rightmousedown)
+        self.bind("<B3-Motion>", self.rightmousemove)
+        self.bind("<ButtonRelease-3>", self.rightmouseup)
 
 class MyApp(App):
     def askcolor(self):
@@ -96,6 +115,7 @@ class DoubleApp(Frame):
         self.ctrlFrame.grid(sticky=N+S+W+E)
         #self.AskColor = Button(self.ctrlFrame, text="Color", command=self.askcolor)
         #self.AskColor.grid(row=0, column=0, sticky=E+W)
+
         
 
 app = DoubleApp(Title="Double Canvas Example")
