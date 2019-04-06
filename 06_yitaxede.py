@@ -62,13 +62,19 @@ class MyApp(App):
 
     def create(self):
         self.Canvas = Paint(self, foreground="midnightblue")
-        self.Canvas.grid(row=0, column=0, rowspan=3, sticky=N+E+S+W)
-        self.AskColor = Button(self, text="Color", command=self.askcolor)
-        self.AskColor.grid(row=0, column=1, sticky=N+W)
-        self.ShowColor = Label(self, textvariable=self.Canvas.foreground)
-        self.ShowColor.grid(row=1, column=1, sticky=N+W+E)
-        self.Quit = Button(self, text="Quit", command=self.quit)
-        self.Quit.grid(row=2, column=1, sticky=N+W)
+        self.Canvas.grid(row=0, column=0, sticky=N+E+S+W)
+        self.ctrlFrame = Frame(self)
+        self.ctrlFrame.grid(row=0, column=1)
+        self.AskColor = Button(self.ctrlFrame, text="Color", command=self.askcolor)
+        self.AskColor.grid(row=0, column=0, sticky=N+W)
+        self.ShowColor = Label(self.ctrlFrame, textvariable=self.Canvas.foreground)
+        self.ShowColor.grid(row=1, column=0, sticky=N+W+E)
+        self.Quit = Button(self.ctrlFrame, text="Quit", command=self.quit)
+        self.Quit.grid(row=2, column=0, sticky=N+W)
+        
+    def adjust(self):
+        self.columnconfigure(0, weight=1)
+        self.rowconfigure(0, weight=1)
 
 app = MyApp(Title="Canvas Example")
 app.mainloop()
