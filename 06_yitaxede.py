@@ -94,10 +94,16 @@ class MyApp(App):
         self.ShowColor.grid(row=1, column=0, sticky=N+W+E)
         self.Clear = Button(self.ctrlFrame, text="Clear", command=lambda:self.Canvas.delete(ALL))
         self.Clear.grid(row=2, column=0, sticky=E+W)
+        self.SaveAs = Button(self.ctrlFrame, text="Save as...", command=lambda:self.Canvas.postscript(file=filedialog.asksaveasfilename(defaultextension=".ps", filetypes=[("PostScript Documents","*.ps")]), colormode="color"))
+        self.SaveAs.grid(row=4, column=0, sticky=E+W)
+        
         
     def adjust(self):
         self.columnconfigure(0, weight=1)
         self.rowconfigure(0, weight=1)
+        
+    #def save_as(self):
+        
         
 class DoubleApp(Frame):
     def __init__(self, master=None, Title="Double Application"):
@@ -112,9 +118,9 @@ class DoubleApp(Frame):
         self.app1 = MyApp(self)
         self.app2 = MyApp(self)
          
-        self.mButton1 = Button(self.app1.ctrlFrame, text="To other canvas", command=self.first_to_second)
+        self.mButton1 = Button(self.app1.ctrlFrame, text="To the other", command=self.first_to_second)
         self.mButton1.grid(row=3, column=0, sticky=E+W)
-        self.mButton2 = Button(self.app2.ctrlFrame, text="To other canvas", command=self.second_to_first)
+        self.mButton2 = Button(self.app2.ctrlFrame, text="To the other", command=self.second_to_first)
         self.mButton2.grid(row=3, column=0, sticky=E+W)
         
         self.ctrlFrame = Frame(self)
