@@ -66,11 +66,11 @@ class MyApp(App):
         self.ctrlFrame = Frame(self)
         self.ctrlFrame.grid(row=0, column=1)
         self.AskColor = Button(self.ctrlFrame, text="Color", command=self.askcolor)
-        self.AskColor.grid(row=0, column=0, sticky=N+W)
-        self.ShowColor = Label(self.ctrlFrame, textvariable=self.Canvas.foreground)
+        self.AskColor.grid(row=0, column=0, sticky=E+W)
+        self.ShowColor = Label(self.ctrlFrame, textvariable=self.Canvas.foreground, height=2)
         self.ShowColor.grid(row=1, column=0, sticky=N+W+E)
         self.Quit = Button(self.ctrlFrame, text="Quit", command=self.quit)
-        self.Quit.grid(row=2, column=0, sticky=N+W)
+        self.Quit.grid(row=2, column=0, sticky=E+W)
         
     def adjust(self):
         self.columnconfigure(0, weight=1)
